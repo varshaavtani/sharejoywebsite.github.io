@@ -6,120 +6,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="MaidFinder by ShareJoy — A trusted way to connect households with verified domestic helpers." />
   <title>MaidFinder : Empowering Helpers, Simplifying Homes.</title>
+
   <style>
-    :root{--brand:#0f3d63;--accent:#ff8a3d;--text:#0f2230;--muted:#5b6b7a;--bg:#f6f7f9;--surface:#ffffff;--radius:14px;--shadow:0 8px 22px rgba(15,34,48,.08)}
+    :root{
+      --brand:#0f3d63;          /* deep blue */
+      --accent:#ff8a3d;         /* warm orange */
+      --text:#0f2230;
+      --muted:#5b6b7a;
+      --bg:#f6f7f9;
+      --surface:#ffffff;
+      --radius:14px;
+      --shadow:0 8px 22px rgba(15,34,48,.08);
+    }
+
+    /* Base */
     *,*::before,*::after{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;color:var(--text);background:var(--bg)}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;color:var(--text);background:var(--bg);line-height:1.55}
     a{text-decoration:none;color:inherit}
+    img{max-width:100%;height:auto;display:block}
+
+    /* Header */
     header{background:var(--surface);box-shadow:0 8px 18px rgba(0,0,0,.05)}
     .container{width:min(1000px,92vw);margin:0 auto}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
     .brand{display:flex;align-items:center;gap:12px;color:var(--brand);font-weight:800}
-   
-    .brand svg{width:34px;height:34px}
-    .brand img { width:100px; height:100px; }
+    .brand img{width:100px;height:100px;object-fit:contain}
+    nav a{color:var(--brand);font-weight:700}
+
     main{padding:42px 0}
+
+    /* ---------- HERO (Option A — Light Gray, image on LEFT) ---------- */
+    .hero{
+      position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+      margin:18px 0 28px;background:#eef1f5; /* light gray base */
+    }
+    .hero::before{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(to right,
+          rgba(238,241,245,0.95) 0%,
+          rgba(238,241,245,0.70) 40%,
+          rgba(238,241,245,0.35) 65%,
+          rgba(238,241,245,0.00) 80%
+        ),
+        url("https://images.unsplash.com/photo-1604881982925-9840f8a8e803?auto=format&fit=crop&q=80&w=1600") center / cover no-repeat;
+      z-index:0;
+    }
+    .hero-inner{
+      position:relative;z-index:1;color:#233648; /* darker text for contrast on light gray */
+      display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;align-items:center;
+      padding:40px 24px;
+    }
+    .hero h1{font-size:clamp(2rem,4.5vw,3rem);margin:0 0 8px;color:var(--brand)}
+    .hero p.lead{color:#3b5168;font-size:1.06rem;margin:0 0 16px}
+    .hero-tags{margin:8px 0 16px}
+    .tag{
+      display:inline-block;background:#eef3f7;color:var(--brand);border:1.5px solid #d8e2ea;
+      padding:6px 10px;border-radius:999px;margin-right:8px;font-weight:700
+    }
+
+    /* Hero image block (LEFT side) */
+    .hero-fig{border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+    .hero-fig img{width:100%;height:100%;object-fit:cover;object-position:top center}
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;border:none;cursor:pointer;
+      padding:12px 16px;border-radius:999px;font-weight:700;box-shadow:var(--shadow);
+      transition:transform .1s ease,box-shadow .2s ease,filter .15s ease;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(15,34,48,.18)}
+    .btn:focus-visible{outline:3px solid #cfe0f2}
+    .btn-primary{background:var(--accent);color:#fff;}  /* Get the App */
+    .btn-brand{background:var(--brand);color:#fff;}     /* WhatsApp styled to brand */
+
+    .btn svg{width:18px;height:18px}
+
+    /* ---------- Content cards & grids ---------- */
     .hero-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
-    h1{color:var(--brand)}
+    h1,h2,h3{color:var(--brand)}
     .lead{color:var(--muted)}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
     .module{background:#fff;border:1px solid #e6edf3;border-radius:12px;padding:16px}
     .module h3{margin:0 0 8px;color:var(--brand)}
-    .tag{display:inline-block;background:#eef3f7;color:var(--brand);border:1px solid #d8e2ea;padding:6px 10px;border-radius:999px;margin-right:8px;font-weight:700}
-    .cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;padding:12px 16px;border-radius:999px;cursor:pointer}
+
+    /* ---------- Combined Vision + Mission (single card, no image) ---------- */
+    .vm-card{
+      background:#fff;border:1px solid #e6edf3;border-radius:12px;padding:18px;box-shadow:var(--shadow);
+      margin-top:18px;
+    }
+    .bullet{margin:0;padding-left:22px;line-height:1.6}
+    .bullet li{margin:8px 0}
+    .bullet strong{color:var(--brand)}
+
+    /* ---------- FAQ ---------- */
+    .faq .q{font-weight:700;color:var(--brand);margin:10px 0 6px}
+
+    /* ---------- Footer ---------- */
     footer{margin-top:40px;background:#0f2a45;color:#cfe0f2}
     .footer-inner{display:flex;justify-content:space-between;padding:24px 0}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px){
+      .hero-inner{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
     <div class="container nav">
-       <a class="brand">
-         <!-- Small logo image in place of the former smiley -->
-        <img src="Logo2.png" alt="ShareJoy logo" />
-       <!-- <span>ShareJoy</span>>-->
+      <a class="brand">
+        <img src="images/Logo2.png" alt="ShareJoy logo">
       </a>
-      <!--
-      <a href="index.html" class="brand">
-        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-          <circle cx="24" cy="24" r="22" fill="#FF8A3D"></circle>
-          <circle cx="17" cy="18" r="3.2" fill="#ffffff"></circle>
-          <circle cx="31" cy="18" r="3.2" fill="#ffffff"></circle>
-          <path d="M12 28c3.5 5.2 9.6 7.8 12 7.8s8.5-2.6 12-7.8" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"></path>
-        </svg>
-        <span>ShareJoy</span>
-      </a> -->
       <nav>
         <a href="index with maidfinderapp.html">Back to Initiatives</a>
       </nav>
     </div>
   </header>
 
+  <!-- HERO (image LEFT, copy RIGHT) -->
+  <section class="hero" aria-label="MaidFinder hero">
+    <div class="hero-inner container">
+      <!-- Left: image -->
+      <figure class="hero-fig" aria-label="Supportive home help">
+        <img src="Thmbusup.png" alt="Home help at work">
+      </figure>
+
+      <!-- Right: copy & buttons -->
+      <div>
+        <h1>MaidFinder App</h1>
+        <p class="lead">Empowering helpers, simplifying homes — a community-first way to find reliable domestic help with dignity and trust.</p>
+
+        <div class="hero-tags">
+          <span class="tag">Self-Service</span>
+          <span class="tag">Quick & Easy</span>
+          <span class="tag">Community-driven</span>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="window.open('https://witty-glacier-0240ff400.3.azurestaticapps.net/', '_blank')">
+            Get the App
+          </button>
+
+          <a class="btn btn-brand" href="https://chat.whatsapp.com/EJS3jBTLkIs07zWUpWXYMX" target="_blank" rel="noopener">
+            <!-- WhatsApp icon (white) -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 0 20 9.9 9.9 0 0 0 6.31-2.24L22 22l-2.34-3.69A10 10 0 0 0 12 2Z" fill="#fff" opacity=".25"/>
+              <path d="M8.7 10.6c.1-.4.2-.8.2-1.2 0-.3.25-.5.55-.5h.7c.3 0 .55.24.55.54 0 1.3-.55 2.5-1.45 3.4l-.08.08c.9.9 2.1 1.45 3.4 1.45.3 0 .54.24.54.55v.7c0 .3-.24.55-.54.55-3.05 0-5.52-2.47-5.52-5.52 0-.3.24-.55.55-.55h.7c.3 0 .54.24.54.55 0 .4.08.8.2 1.2Z" fill="#fff"/>
+            </svg>
+            Join WhatsApp Group
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Content -->
   <main class="container">
-    <article class="hero-card">
-      <h1>MaidFinder App:</h1> <!--<h2> Empowering Helpers, Simplifying Homes.</h2>-->
-      <p class="lead">MaidFinder is a Community Service and Helping residents to find reliable domestic helpers .</p>
+    <!-- SINGLE CARD: Vision & Mission -->
+    <article class="vm-card" aria-labelledby="vm-title">
+      <h2 id="vm-title">Vision &amp; Mission</h2>
 
+      <p class="lead">MaidFinder is a community service created to help:</p>
+      <ul class="bullet">
+        <li><strong>Househelps</strong> find the right job that matches their skills.</li>
+        <li><strong>Residents</strong> find reliable househelp that fits their exact requirements—easily and transparently.</li>
+      </ul>
+
+      <p class="lead" style="margin-top:10px">We aim to empower local communities by building a unified, transparent, and reliable ecosystem where:</p>
+      <ul class="bullet">
+        <li><strong>Househelps</strong> access fair job opportunities without middlemen or exploitation.</li>
+        <li><strong>Residents</strong> find reliable househelps quickly and conveniently.</li>
+        <li><strong>Communities</strong> contribute and keep information updated, ensuring accuracy, safety, and trust.</li>
+      </ul>
+    </article>
+
+    <!-- Your original sections (kept) -->
+    <article class="hero-card" style="margin-top:22px">
       <div class="grid">
         <section class="module">
-          <h3>Vision</h3>
-          
-            <p>ShareJoy MaidFinder is created as a community service to help:</p>
-            
-          
-            <ul><li><strong></strong>Househelps find the right job that matches their skills.</li>
-            <li><strong></strong>Residents find reliable househelp that fits their exact requirements—easily and transparently.</li>
-           <!-- <li><strong>Create a Request:</strong> share your location, preferred timings, and responsibilities.</li>
-            <li><strong>Browse Verified Profiles:</strong> check experience, skills, and neighborhood references.</li>
-            <li><strong>Shortlist & Meet:</strong> schedule an intro chat or trial day right in the app.</li>
-            <li><strong>Hire & Support:</strong> finalize terms, track attendance, and rate the experience.</li> -->
-          </ul>
-          <!--<p>
-            <span class="tag">Verified IDs</span>
-            <span class="tag">Neighborhood References</span>
-            <span class="tag">In‑app Scheduling</span>
-          </p> -->
-        </section>
-
-        <section class="module">
-          <h3>Mission</h3>
-          <p> Our mission is to empower local communities by creating a unified, transparent, and reliable ecosystem where: </p>
-          <ul>
-            <li>Househelps can access fair job opportunities without middlemen or exploitation.</li>
-            <li>Residents can find reliable househelps quickly and conveniently.</li>
-            <li>Communities regularly contribute and keep information updated, ensuring accuracy, safety, and trust.</li>
-          </ul>
-         
-        </section>
-
-        <section class="module">
           <h3>What Is It</h3>
-          <p>A simple web app to help you add or find house helps easily based on the area and availability.
+          <p>A simple web app to help you add or find househelps easily based on area and availability.</p>
+          <ul>
+            <li>🔍 Search househelp like maid, driver, nanny, patient care, mehendi artist, etc. by name, area, or work type.</li>
+            <li>📱 Register &amp; log in with your phone number.</li>
+            <li>📞 View contact details instantly.</li>
+            <li>✅ Add or update maid details on their behalf.</li>
+            <li>🚨 Access important local contacts anytime.</li>
+            <li>💬 Share feedback or rate your helps!</li>
+          </ul>
+          <p>
+            <button class="btn btn-primary" onclick="window.open('https://witty-glacier-0240ff400.3.azurestaticapps.net/', '_blank')">Get the App</button>
+            <a class="btn btn-brand" href="https://chat.whatsapp.com/EJS3jBTLkIs07zWUpWXYMX" target="_blank" rel="noopener">Join WhatsApp Group</a>
           </p>
-            <ul>
-              <li>🔍 Search househelp like maid, driver, Nanny, Patient care, Mehendi artist etc. by name, area, or work type.</li>
-              <li>📱 Register & log in with your phone number.</li>
-              <li>📞 View contact details instantly.</li>
-              <li>✅ Add or update maid details on their behalf</li>
-              <li>🚨 Access important local contacts anytime</li>
-              <li>💬 Share feedback or rate your helps !</li>
-            </ul>
-             <!-- <p><button class="cta" onclick="alert('https://witty-glacier-0240ff400.3.azurestaticapps.net/ ')">Get the App</button></p> -->
-              <p><button class="cta" onclick="window.open('https://witty-glacier-0240ff400.3.azurestaticapps.net/', '_blank');">Get the App</button></p>
-<!--<button onclick="window.open('https://www.example.com', '_blank');">
-    Open Example in New Tab
-</button>-->
-
         </section>
 
-        <section class="module">
+        <section class="module faq">
           <h3>Frequently Asked Questions</h3>
-          <p><strong>Is verification mandatory?</strong> Yes—ID check and references ensure trust.</p>
-          <p><strong>Do you handle payments?</strong> Families and helpers agree terms directly; we provide guidance and the platform.</p>
-          <p><strong>Is there a subscription?</strong> This is a community service supported by voluntery support.</p>
+          <p class="q">Is verification mandatory?</p>
+          <p>Yes—ID check and references help ensure trust and safety.</p>
+
+          <p class="q">Do you handle payments?</p>
+          <p>Families and helpers agree terms directly; we provide guidance and the platform.</p>
+
+          <p class="q">Is there a subscription?</p>
+          <p>This is a community service, supported by voluntary contributions.</p>
         </section>
       </div>
     </article>
@@ -133,7 +226,8 @@
     </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-``
