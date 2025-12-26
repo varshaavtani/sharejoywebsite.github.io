@@ -1,0 +1,985 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ShareJoy — A community that spreads happiness through initiatives, events, and support. Get involved and make a difference." />
+  <title>ShareJoy — Spreading Happiness Together</title>
+
+  <style>
+    /* =========================
+       Design Tokens
+       ========================= */
+    :root{
+      --brand:#0f3d63;        /* deep blue */
+      --accent:#ff8a3d;       /* warm orange */
+      --text:#0f2230;         /* primary text */
+      --muted:#5b6b7a;        /* secondary text */
+      --bg:#f6f7f9;           /* page background */
+      --surface:#ffffff;      /* cards */
+      --radius:14px;
+      --shadow:0 8px 22px rgba(15,34,48,.08);
+      --max:1100px;
+    }
+
+    /* =========================
+       Base Reset
+       ========================= */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.55;
+    }
+    img{max-width:100%;height:auto;display:block}
+    a{text-decoration:none;color:inherit}
+    h1,h2,h3{line-height:1.15;margin:0 0 .5rem}
+    p{margin:.6rem 0}
+    section{padding:64px 0}
+    .container{width:min(var(--max),92vw);margin:0 auto}
+
+    /* =========================
+       Header / Navigation
+       ========================= */
+    header{
+      position:sticky;top:0;z-index:10;background:var(--surface);
+      box-shadow:0 8px 18px rgba(0,0,0,.05);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px;color:var(--brand);font-weight:800}
+    .brand svg{width:34px;height:34px}
+    .brand img{width:100px;height:100px}
+    .menu{display:flex;gap:22px;align-items:center}
+    .menu a{font-weight:600;padding:10px 12px;border-radius:10px}
+    .menu a:hover{background:#eef3f7}
+    .menu-btn{display:none;border:0;background:transparent;cursor:pointer}
+    .menu-btn svg{width:28px;height:28px}
+
+    /* =========================
+       Hero
+       ========================= */
+    .hero{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center
+    }
+    .eyebrow{color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .hero h1{font-size:clamp(2rem,4.5vw,3rem);color:var(--brand)}
+    .hero p{font-size:1.125rem;color:var(--muted);margin:10px 0 24px}
+    .cta{
+      display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;font-weight:700;
+      padding:14px 18px;border-radius:999px;border:none;cursor:pointer;box-shadow:var(--shadow);
+      transition:transform .1s ease,box-shadow .2s ease
+    }
+    .cta:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(255,138,61,.25)}
+
+    .hero-art{
+      background:radial-gradient(1200px 600px at 10% 10%, #eaf4ff 0, #f8fbff 60%, transparent 100%);
+      border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)
+    }
+
+    /* =========================
+       About / Initiatives / Get Involved
+       ========================= */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+    .card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .lead{font-size:1.05rem;color:var(--muted)}
+    .list{margin:.6rem 0 0 0;padding:0 0 0 18px}
+    .badge{display:inline-block;background:#eef3f7;color:var(--brand);border:1px solid #d8e2ea;padding:6px 10px;border-radius:999px;margin-right:8px;font-weight:700}
+
+    /* =========================
+       Impact Stories
+       ========================= */
+    .stories{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+    .story{background:#fff;border:1px solid #e7edf3;border-radius:12px;padding:16px}
+    .quote{font-style:italic;color:#2c3e50}
+
+    /* =========================
+       Gallery
+       ========================= */
+    .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .gallery-grid figure{margin:0;overflow:hidden;border-radius:14px;background:#fff;box-shadow:var(--shadow)}
+    .gallery-grid img{transition:transform .35s ease}
+    .gallery-grid figure:hover img{transform:scale(1.04)}
+    .gallery-grid figcaption{padding:10px 12px;font-size:.95rem;color:var(--muted)}
+
+    /* =========================
+       Contact
+       ========================= */
+    .contact-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    .input{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #d8e2ea;margin:.5rem 0}
+    .input:focus{outline:3px solid #cfe0f2}
+    .submit{background:var(--brand);color:#fff;border:0;padding:12px 16px;border-radius:999px;font-weight:700;cursor:pointer}
+
+    /* =========================
+       Footer
+       ========================= */
+    footer{margin-top:48px;background:#0f2a45;color:#cfe0f2}
+    .footer-inner{display:grid;grid-template-columns:2fr 1fr;gap:24px;padding:28px 0}
+    .footer-inner a{color:#fff}
+
+    /* =========================
+       Responsive
+       ========================= */
+    @media (max-width:960px){
+      .hero,.grid-2,.contact-grid{grid-template-columns:1fr}
+      .stories{grid-template-columns:1fr 1fr}
+      .gallery-grid{grid-template-columns:repeat(3,1fr)}
+      .footer-inner{grid-template-columns:1fr}
+      .menu-btn{display:inline-flex}
+      .menu{display:none}
+      .menu.open{display:flex;flex-direction:column;gap:6px;padding:10px 0}
+      .menu a{padding:12px 14px}
+    }
+    @media (max-width:640px){
+      .stories{grid-template-columns:1fr}
+      .gallery-grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    /* Visually hidden for accessibility (e.g., headings for ARIA landmarks) */
+    .sr-only{position:absolute;left:-9999px}
+
+
+/* -------- Our Story section -------- */
+.story-section {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr; /* text : images */
+  gap: 24px;
+  align-items: start;
+}
+
+.story-content h2 {
+  font-size: clamp(1.75rem, 3.8vw, 2.25rem);
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+
+.story-content p {
+  font-size: 1.06rem;
+  color: var(--text);
+}
+
+.story-content em.highlight {
+  font-style: normal;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.story-values h3 {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  margin: 20px 0 6px;
+  color: var(--text);
+}
+
+.values-list {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+.values-list li { margin: 8px 0; }
+
+.story-media {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+
+.story-media .img-card {
+  background: #f7fafc;
+  border: 1px solid #e7edf3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.story-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Decorative soft backdrop on large screens */
+.story-section::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  top: -24px;
+  width: 180px; height: 180px;
+  border-radius: 24px;
+  background:
+    radial-gradient(220px 160px at 40% 40%, rgba(255,138,61,.12), transparent 60%),
+    radial-gradient(320px 220px at 80% 60%, rgba(15,61,99,.10), transparent 70%);
+  pointer-events: none;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 960px) {
+  .story-section {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+  .story-section::after { display: none; }
+}
+
+
+/* ===== Welcome / About ShareJoy hero ===== */
+.welcome-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr; /* text : image area */
+  align-items: center;
+  min-height: 64vh;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #19c2c8; /* teal base in case the image doesn't load */
+}
+
+/* The background image sits behind everything via a pseudo-element */
+.welcome-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("Images/Welcome-bg.png") center right / cover no-repeat;
+  opacity: 1;
+  z-index: 0;
+}
+
+/* A soft gradient overlay to ensure text readability on the left side */
+.welcome-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.92) 0%,
+    rgba(255,255,255,0.78) 35%,
+    rgba(255,255,255,0.30) 55%,
+    rgba(255,255,255,0.00) 75%
+  );
+  z-index: 1;
+}
+
+.welcome-inner {
+  position: relative;
+  z-index: 2; /* above overlays */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 36px;
+}
+
+.welcome-copy {
+  color: var(--text);
+  max-width: 640px;
+}
+
+.welcome-eyebrow {
+  font-family: "Trebuchet MS", system-ui, sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--brand);
+  margin: 0 0 8px;
+}
+
+.welcome-title {
+  font-family: "Trebuchet MS", system-ui, sans-serif;
+  font-size: clamp(2rem, 4.6vw, 3rem);
+  font-weight: 800;
+  color: var(--brand);
+  margin: 0 0 12px;
+}
+
+.welcome-text {
+  font-family: "Trebuchet MS", system-ui, sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  line-height: 1.6;
+  color: #233648;
+  max-width: 52ch;
+}
+
+.welcome-text .dash {
+  letter-spacing: 0.02em;
+}
+
+.welcome-cta {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform .1s ease, box-shadow .2s ease;
+}
+.welcome-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(255,138,61,.25);
+}
+
+/* Right column keeps space so the background image shows on that side */
+.welcome-illustration {
+  min-height: 280px; /* ensures the right side remains visible */
+}
+
+/* Responsive: stack content, turn into a top banner */
+@media (max-width: 960px) {
+  .welcome-hero {
+    grid-template-columns: 1fr;
+    border-radius: 0; /* optional: full-bleed on mobile */
+  }
+  .welcome-hero::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.90) 0%,
+      rgba(255,255,255,0.66) 40%,
+      rgba(255,255,255,0.00) 70%
+    );
+  }
+  .welcome-inner {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+  .welcome-illustration { min-height: 0; }
+}
+
+
+/* -------- Who We Are section -------- */
+.who-section {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr; /* text : image */
+  gap: 24px;
+  align-items: start;
+}
+
+.who-content h2 {
+  font-size: clamp(1.75rem, 3.8vw, 2.25rem);
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+
+.who-content p {
+  font-size: 1.06rem;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.who-content em.highlight {
+  font-style: normal;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.who-philosophy h3 {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  margin: 18px 0 8px;
+  color: var(--text);
+}
+
+.philosophy-list {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+.philosophy-list li { margin: 8px 0; }
+
+/* Single image card on the right */
+.who-media {
+  background: #f7fafc;
+  border: 1px solid #e7edf3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.who-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Decorative soft backdrop (optional) */
+.who-section::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  top: -24px;
+  width: 160px; height: 160px;
+  border-radius: 24px;
+  background:
+    radial-gradient(220px 160px at 40% 40%, rgba(255,138,61,.10), transparent 60%),
+    radial-gradient(320px 220px at 80% 60%, rgba(15,61,99,.08), transparent 70%);
+  pointer-events: none;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 960px) {
+  .who-section {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+  .who-section::after { display: none; }
+}
+
+
+/* -------- What We Do / Our Initiatives -------- */
+.initiatives-section {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr; /* text : image (adjust as needed) */
+  gap: 24px;
+  align-items: start;
+}
+
+.initiatives-content h2 {
+  font-size: clamp(1.75rem, 3.8vw, 2.25rem);
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+
+.initiatives-content p.lead {
+  font-size: 1.06rem;
+  color: var(--text);
+  margin: 0 0 14px;
+}
+
+.initiatives-list {
+  margin: 0;
+  padding-left: 22px; /* bullet indentation */
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+.initiatives-list li { margin: 8px 0; }
+
+.initiatives-list strong {
+  color: var(--brand);
+}
+
+/* Single image card on the right (optional) */
+.initiatives-media {
+  background: #f7fafc;
+  border: 1px solid #e7edf3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+
+}
+.initiatives-media img {
+  width: 100%;
+  height: 200px;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Decorative soft backdrop (optional) */
+.initiatives-section::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  top: -24px;
+  width: 160px; height: 160px;
+  border-radius: 24px;
+  background:
+    radial-gradient(220px 160px at 40% 40%, rgba(255,138,61,.10), transparent 60%),
+    radial-gradient(320px 220px at 80% 60%, rgba(15,61,99,.08), transparent 70%);
+  pointer-events: none;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 960px) {
+  .initiatives-section {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+  .initiatives-section::after { display: none; }
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- =========================
+       Header
+       ========================= -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a href="#home" class="brand">
+        <!-- Simple smile logo (inline SVG) -->
+
+   <!-- Small logo image in place of the former smiley -->
+        <img src="images/Logo2.png" alt="ShareJoy logo" />
+       <!-- <span>ShareJoy</span>>-->
+      </a>
+
+        <!--<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="#FF8A3D"></circle>
+          <circle cx="17" cy="18" r="3.2" fill="#ffffff"></circle>
+          <circle cx="31" cy="18" r="3.2" fill="#ffffff"></circle>
+          <path d="M12 28c3.5 5.2 9.6 7.8 12 7.8s8.5-2.6 12-7.8" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"></path>
+        </svg>-->
+    
+
+
+      <button class="menu-btn" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+
+      <nav class="menu" id="menu">
+        <a href="#about">About Us</a>
+        <a href="#initiatives">Our Initiatives</a>
+        <a href="Maidfinder.html">MaidFinder App</a>
+        <a href="#involved">Get Involved</a>
+        <a href="#stories">Impact Stories</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main id="home" class="container">
+    <!-- =========================
+         Hero
+         ========================= -->
+
+
+<section class="welcome-hero" role="banner" aria-label="Welcome to ShareJoy">
+  <div class="welcome-inner">
+    <div class="welcome-copy">
+     <!-- <div class="welcome-eyebrow">About</div> -->
+      
+          <div>
+        <div class="eyebrow">Welcome to</div>
+        <h1 class="welcome-title">ShareJoy</h1> 
+       
+      </div>
+      <p class="welcome-text">
+       
+        Our Mission is to uplift lives by sharing time, knowledge, opportunities, and essentials
+        <span class="dash">—</span>
+        making every soul feel respected and joyful.
+      </p>
+      <!-- <p>To create a world where every soul feels valued, respected, and joyful by fostering a culture of sharing, compassion, and empowerment.</p> -->
+        <a class="cta" href="#involved" aria-label="Join ShareJoy">Join the Movement</a>
+    </div>
+
+    <!-- This column is intentionally left empty to reveal the right-side image in the background -->
+ <!--   <div class="welcome-illustration" aria-hidden="true"></div>
+  </div>
+</section>
+
+    <section class="hero" aria-label="Hero">
+      <div>
+        <div class="eyebrow">Welcome to</div>
+        <h1>ShareJoy</h1>
+        <p>To create a world where every soul feels valued, respected, and joyful by fostering a culture of sharing, compassion, and empowerment.</p>
+        <a class="cta" href="#involved" aria-label="Join ShareJoy">Join the Movement</a>
+      </div> -->
+
+      
+<!-- Right: Hero Image -->
+
+<!--<div class="hero-media">
+  <img src="Sharejoy image block.jpg"
+       alt="ShareJoy"
+       loading="lazy"
+       decoding="async"
+       class="hero-img">
+  <div class="hero-blob" aria-hidden="true"></div>
+</div>-->
+
+
+  <!-- Optional decorative overlay to match ShareJoy style -->
+  <div class="hero-blob" aria-hidden="true"></div>
+</div>
+
+    </section>
+
+    <!-- =========================
+         About Us
+         ========================= -->
+
+
+<section id="about" aria-labelledby="about-title">
+  <div class="who-content">
+    
+    <h2 id="who-title">Who Are We</h2>
+
+    <p>
+      <em class="highlight">ShareJoy is more than a platform—it’s a movement.</em>
+      Our vision is to create a Compassionate, Connected world where people empower one another through kindness and Community.
+    </p>
+
+    <p>
+      Our philosophy is <strong>Community · Compassion · Empower</strong>. ShareJoy is a community‑run,
+      community‑supported initiative for the community. We believe in the power of togetherness—sharing time, knowledge,
+      work, and resources to make every soul feel great and truly happy.
+    </p>
+
+    <!--<div class="who-philosophy">
+      <h3>Philosophy</h3>
+      <ul class="philosophy-list">
+        <li><strong>Community:</strong> Built with and for the community—everyone participates and benefits.</li>
+        <li><strong>Support:</strong> Practical help and encouragement that meet real needs.</li>
+        <li><strong>Compassion:</strong> Kindness at the core—respecting dignity and uplifting spirits.</li>
+        <li><strong>Empower:</strong> Create opportunities to learn, lead, and thrive together.</li>
+      </ul>
+    </div>
+  
+</div>
+  <figure class="who-media" aria-label="Who We Are image">
+    <img src="Images/Who-are-we.png" alt="We are we">
+  </figure> -->
+
+</section>
+
+  <!--  <section id="about" aria-labelledby="about-title">
+      <div class="card">
+        <h2 id="about-title">Who We Are</h2>
+        <p class="lead">
+          ShareJoy is more than a platform—it’s a movement. 
+          We believe that joy multiplies when shared, and our mission is to create opportunities for people to give, connect, and grow together.
+          Every initiative we undertake is designed to uplift lives and strengthen the fabric of our community.
+        </p>
+        <p>
+          Our philosphy is <span class="badge">Community-Support</span> <span class="badge">Compession</span> <span class="badge">Empower</span>.
+          ShareJoy is a community-run, community-supported initiative for the community. 
+          We believe in the power of togetherness—sharing time, knowledge, work, and resources to make every soul feel great and truly happy.
+        </p>
+      </div>
+    </section> -->
+
+    <!-- =========================
+       Our Story
+       ========================= -->
+<section class="story-section" aria-labelledby="our-story-title">
+   
+  <div class="story-content">
+    <h2 id="our-story-title">Our Story</h2>
+    <p>
+      ShareJoy began with a simple idea:
+      <em class="highlight">Happiness grows when shared.</em>
+      What started as small donation drives evolved into a grassroots ecosystem—connecting orphanages, farmers, home businesses,
+      and househelps with people who care.
+    </p>
+
+    <div class="story-values">
+      <h3>Values</h3>
+      <ul class="values-list">
+        <li><strong>Respect &amp; Dignity:</strong> Every soul matters.</li>
+        <li><strong>Inclusion:</strong> Everyone is welcome to contribute and benefit.</li>
+        <li><strong>Transparency:</strong> Clear processes and accountable impact.</li>
+        <li><strong>Sustainability:</strong> Doing good responsibly—for people and the planet.</li>
+        <li><strong>Community‑First:</strong> Designed by the community, for the community.</li>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="story-media" aria-label="Our Story images">
+    <figure class="img-card">
+      <img src="images/story-heart.png" alt="Sunset forming a heart shape over an open book" loading="lazy">
+    </figure>
+    <figure class="img-card">
+      <img src="images/story-kids.png" alt="Children sitting together on grass during a community activity" loading="lazy">
+    </figure>
+  </aside>
+ 
+</section>
+
+    <!-- =========================
+         Our Initiatives
+         ========================= -->
+    <section id="initiatives" aria-labelledby="init-title">
+
+
+   <!--<section class="initiatives-section" aria-labelledby="initiatives-title"> -->
+  <div class="initiatives-content">
+     <article class="card">
+        
+    <h2 id="initiatives-title">Our Initiatives</h2>
+   <figure class="initiatives-media" aria-label="ShareJoy initiatives image">
+    
+    <img src="Images/All_together_imagewithheart_tshirt.jpg" alt="" loading="lazy">
+  </figure>
+    <p class="lead">
+      We support communities and individuals in need through meaningful actions such as:
+    </p>
+
+    <ul class="initiatives-list">
+      <li>
+        <strong>Support &amp; Donations </strong> — We support orphanages, institutions with organizing donation drives to fulfill their needs.
+      </li>
+      <li>
+        <strong>MaidFinder App Service</strong> — A community app that bridges the gap between residents and househelps—helping workers find the right jobs and households find trusted help.
+      </li>
+      <li>
+        <strong>ShareJoy Garage Sale</strong> — Promoting sustainability through sales of pre-loved items, reducing waste and giving products a second life.
+      </li>
+      <li>
+        <strong>ShareJoy Market</strong> — Empowering home-run businesses and farmers by creating a marketplace for local, sustainable products.
+      </li>
+      <li>
+        <strong>Book Club &amp; 5 AM Club</strong> — Encouraging learning, wellness, and community bonding through reading, yoga, and meditation.
+      </li>
+      <li>
+        <strong>ShareJoy Market &amp; Garage Sale</strong> — Promoting sustainability and empowering home-run businesses and farmers.
+      </li>
+      <li>
+        <strong>Community Groups</strong> — Dedicated spaces for job sharing, property assistance, carpooling, and more—because collaboration makes life easier.
+      </li>
+     
+    </ul>
+  </div>
+
+  <!-- Optional image on the right (remove <figure> if not needed) 
+   
+  <figure class="initiatives-media" aria-label="ShareJoy initiatives image">
+    
+    <img src="Images/Who-are-we.png" alt="" loading="lazy">
+  </figure> -->
+   
+ 
+   
+  </article>
+</section>
+
+
+<!--
+      <div class="grid-2">
+        <article class="card">
+          <h2 id="init-title">What We Do</h2>
+          <p class="lead">A blend of practical support and joyful experiences.</p>
+          <ul class="list">
+            <li><strong>Support & Donation Drives:</strong> pop‑up meetups, neighborhood festivals, and kindness drives.</li>
+            <li><strong>Workshops:</strong> mindfulness, creative arts, and life‑skills for all ages.</li>
+            <li><strong>Support Circles:</strong> themed group sessions guided by trained facilitators.</li>
+            <li><strong>MaidFinder App:</strong> connecting households with verified domestic helpers (see the subpage).</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>What Makes Us Different</h3>
+          <p>
+            We measure success in stories, not just numbers. Each initiative prioritizes <em>accessibility</em> (clear communication and
+            flexible formats), <em>community ownership</em> (local leaders co‑create sessions), and <em>sustainability</em> (repeatable models
+            that grow with your neighborhood).
+          </p>
+          <p><a class="cta" href="#stories">See Our Impact</a></p>
+        </article>
+      </div>
+    </section>-->
+
+    <!-- =========================
+         Get Involved
+         ========================= -->
+    <section id="involved" aria-labelledby="involved-title">
+      <div class="grid-2">
+        <article class="card">
+          <h2 id="involved-title">Get Involved</h2>
+          <p class="lead">There’s a place for everyone at ShareJoy.</p>
+          <ul class="list">
+            <li><strong>Volunteer:</strong> help host events, facilitate sessions, or manage logistics.</li>
+            <li><strong>Partner:</strong> bring your organization’s expertise to co‑run initiatives.</li>
+            <li><strong>Sponsor:</strong> fund workshops, supplies, and scholarships.</li>
+            <li><strong>Spread the Word:</strong> share our programs with family and friends.</li>
+          </ul>
+          <p><a class="cta" href="#contact">Sign Up Today</a></p>
+        </article>
+
+        <article class="card">
+          <h3>Upcoming Opportunities</h3>
+          <p>We update volunteer roles monthly. Typical roles include:</p>
+          <p>
+            <span class="badge">Event Host</span>
+            <span class="badge">Workshop Coach</span>
+            <span class="badge">Community Outreach</span>
+            <span class="badge">Logistics Lead</span>
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- =========================
+         Impact Stories
+         ========================= -->
+    <section id="stories" aria-labelledby="stories-title">
+      <div class="card">
+        <h2 id="stories-title">Impact Stories</h2>
+        <p class="lead">Real moments from our community—small acts, big smiles.</p>
+
+        <div class="stories">
+          <div class="story">
+            <p class="quote">“After the gratitude circle, I felt lighter and more connected to my neighbors.”</p>
+            <p><strong>— A participant, Gratitude Circles</strong></p>
+          </div>
+          <div class="story">
+            <p class="quote">“The life‑skills workshop helped me prepare for my first job interview.”</p>
+            <p><strong>— Workshop attendee</strong></p>
+          </div>
+          <div class="story">
+            <p class="quote">“Our donation drive delivered study kits to 50 students in two weeks.”</p>
+            <p><strong>— Volunteer team</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         Picture Gallery
+         ========================= -->
+    <section id="gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <h2 id="gallery-title">Picture Gallery</h2>
+        <p class="lead">Highlights from recent gatherings, workshops, and community programs.</p>
+
+        <div class="gallery-grid" role="list">
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop" alt="Community workshop group around a table">
+            <figcaption>Creative Workshop</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop" alt="Volunteers coordinating a community drive">
+            <figcaption>Community Drive</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1520975922200-7d71c9842fb1?q=80&w=1200&auto=format&fit=crop" alt="Support session with participants sharing">
+            <figcaption>Support Session</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1519744792095-2f2205e87fda?q=80&w=1200&auto=format&fit=crop" alt="Community meetup in an open space">
+            <figcaption>Community Meetup</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1443916568596-df5a58c445e9?q=80&w=1200&auto=format&fit=crop" alt="Joyful moment during a group activity">
+            <figcaption>Joyful Moments</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1515165562835-c3b8c1dfbbf0?q=80&w=1200&auto=format&fit=crop" alt="Inspirational talk at a community event">
+            <figcaption>Inspirational Talk</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1518609571773-39b7d0f0d7da?q=80&w=1200&auto=format&fit=crop" alt="Skill-building activity during a workshop">
+            <figcaption>Skill Building</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop" alt="Neighborhood celebration with decorations">
+            <figcaption>Neighborhood Festival</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         Contact
+         ========================= -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="contact-grid">
+        <article class="card">
+          <h2 id="contact-title">Contact</h2>
+          <p class="lead">Want to collaborate, volunteer, or attend an upcoming event? We’d love to hear from you.</p>
+          <form aria-label="Contact form" action="#" method="post">
+            <label for="name">Name</label>
+            <input id="name" class="input" type="text" name="name" placeholder="Your name" required>
+            <label for="email">Email</label>
+            <input id="email" class="input" type="email" name="email" placeholder="you@example.com" required>
+            <label for="message">Message</label>
+            <textarea id="message" class="input" name="message" rows="5" placeholder="Tell us how you'd like to get involved"></textarea>
+            <button class="submit" type="submit">Send Message</button>
+          </form>
+        </article>
+
+        <aside class="card">
+          <h3>Ways to Reach Us</h3>
+          <p><strong>Email:</strong> hello@sharejoy.org</p>
+          <p><strong>Social:</strong> Instagram · Facebook · LinkedIn</p>
+          <p><strong>Address:</strong> Community Center, Main Street</p>
+          <p><a class="cta" href="maidfinder.html">Explore MaidFinder</a></p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================
+       Footer
+       ========================= -->
+  <footer role="contentinfo">
+    <div class="container footer-inner">
+      <div>
+        <strong>ShareJoy</strong>
+        <p>Spreading happiness through community events, workshops, and support services.</p>
+        <small>&copy; <span id="year"></span> ShareJoy Community. All rights reserved.</small>
+      </div>
+      <div>
+        <p><strong>Navigate</strong></p>
+        <p>
+          <a href="#about">About</a> ·
+          <a href="#initiatives">Initiatives</a> ·
+          <a href="#involved">Get Involved</a> ·
+          <a href="#stories">Stories</a> ·
+          <a href="#gallery">Gallery</a> ·
+          <a href="#contact">Contact</a> ·
+          <a href="maidfinder.html">MaidFinder</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+ 
+
+  <!-- =========================
+       Scripts (menu, smooth scroll, year)
+       ========================= -->
+  <script>
+    // Current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const menuBtn = document.querySelector('.menu-btn');
+    const menu = document.getElementById('menu');
+    menuBtn?.addEventListener('click', () => {
+      const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!expanded));
+      menu.classList.toggle('open');
+    });
+
+    // Smooth scroll for in-page links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
